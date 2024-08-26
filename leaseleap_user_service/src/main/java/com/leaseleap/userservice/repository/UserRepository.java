@@ -8,4 +8,6 @@ import com.leaseleap.userservice.model.Users;
 @Repository
 public interface UserRepository extends JpaRepository<Users, Long>{
 	
+	public Users findByUsername(String username);
+	
 }

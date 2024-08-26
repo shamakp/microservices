@@ -1,14 +1,12 @@
 package com.leaseleap.userservice.model;
 
-import org.hibernate.validator.constraints.UniqueElements;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,6 +14,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+
 
 @Setter
 @Getter
@@ -30,7 +30,7 @@ public class Users {
 	private Long userId;
 	
 	@NotBlank
-	@UniqueElements
+	@Column(unique=true)
 	private String username;
 	
 	@NotBlank
@@ -49,9 +49,11 @@ public class Users {
 	
 	@JsonProperty("mobile_number")
 	@NotBlank
+	@Column(unique=true)
 	private String mobileNumber;
 	
 	@Email
+	@Column(unique=true)
 	private String email;
 
 }

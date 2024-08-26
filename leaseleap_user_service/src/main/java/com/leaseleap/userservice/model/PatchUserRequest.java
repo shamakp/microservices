@@ -18,6 +18,8 @@ public class PatchUserRequest {
 	@JsonProperty("last_name")
 	private String lastName;
 	
+	private String password;
+	
 	private String mobileNumber;
 	
 	private String email;

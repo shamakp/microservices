@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.leaseleap.userservice.model.LoginUserRequest;
 import com.leaseleap.userservice.model.PatchUserRequest;
 import com.leaseleap.userservice.model.Users;
 import com.leaseleap.userservice.service.UserService;
@@ -21,19 +23,28 @@ import jakarta.validation.Valid;
 
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("leaseleap/v1")
 public class UserController {
 	
 	@Autowired
 	private UserService userService;
 	
-	@PostMapping
+	@PostMapping("/login")
+	@ResponseStatus(HttpStatus.OK)
+	public void login(@Valid @RequestBody LoginUserRequest loginUser) {
+		if(!userService.login(loginUser)) {
+			return;
+		}
+		return;
+	}
+	
+	@PostMapping("/users")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createUser(@Valid @RequestBody Users user) {
 		userService.createUser(user);
 	}
 	
-	@GetMapping
+	@GetMapping("/users")
 	@ResponseStatus(HttpStatus.OK)
 	public List<Users> listUsers() {
 		return userService.listUsers();
