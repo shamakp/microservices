@@ -10,7 +10,7 @@ import com.leaseleap.userservice.model.Users;
 
 public interface UserService extends UserDetailsService {
 	
-	public void createUser(Users user);
+	public Users createUser(Users user);
 
 	public List<Users> listUsers();
 

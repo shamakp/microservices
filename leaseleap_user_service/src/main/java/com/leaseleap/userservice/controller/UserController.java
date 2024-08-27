@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.leaseleap.userservice.exception.WrongPasswordException;
 import com.leaseleap.userservice.model.LoginUserRequest;
 import com.leaseleap.userservice.model.PatchUserRequest;
 import com.leaseleap.userservice.model.Users;
@@ -33,15 +34,15 @@ public class UserController {
 	@ResponseStatus(HttpStatus.OK)
 	public void login(@Valid @RequestBody LoginUserRequest loginUser) {
 		if(!userService.login(loginUser)) {
-			return;
+			throw new WrongPasswordException("The given password is wrong");
 		}
 		return;
 	}
 	
 	@PostMapping("/users")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createUser(@Valid @RequestBody Users user) {
-		userService.createUser(user);
+	public Users createUser(@Valid @RequestBody Users user) {
+		return userService.createUser(user);
 	}
 	
 	@GetMapping("/users")

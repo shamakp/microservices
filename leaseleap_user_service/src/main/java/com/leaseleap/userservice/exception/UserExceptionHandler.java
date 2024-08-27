@@ -1,4 +1,4 @@
-package com.leaseleap.userservice.controller;
+package com.leaseleap.userservice.exception;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -48,7 +48,25 @@ public class UserExceptionHandler {
 	}
 	
 	@ExceptionHandler(UsernameNotFoundException.class)
-	public ResponseEntity<ErrorMessage> handleNotFoundException(UsernameNotFoundException e) {
+	public ResponseEntity<ErrorMessage> handleUsernameNotFoundException(UsernameNotFoundException e) {
+		return new ResponseEntity<ErrorMessage>(
+				new ErrorMessage(404, e.getMessage()), HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(WrongPasswordException.class)
+	public ResponseEntity<ErrorMessage> handleWrongPasswordException(WrongPasswordException e) {
+		return new ResponseEntity<ErrorMessage>(
+				new ErrorMessage(403, e.getMessage()), HttpStatus.FORBIDDEN);
+	}
+	
+	@ExceptionHandler(UserCreationException.class)
+	public ResponseEntity<ErrorMessage> handleUserCreationException(UserCreationException e) {
+		return new ResponseEntity<ErrorMessage>(
+				new ErrorMessage(400, e.getMessage()), HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<ErrorMessage> handleUserNotFoundException(UserNotFoundException e) {
 		return new ResponseEntity<ErrorMessage>(
 				new ErrorMessage(404, e.getMessage()), HttpStatus.NOT_FOUND);
 	}

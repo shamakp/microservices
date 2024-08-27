@@ -18,21 +18,17 @@ public class SecurityConfig {
 	private static PasswordEncoder passwordEncoder;
 	
     public static PasswordEncoder getPasswordEncoder() {
-    	if(Objects.nonNull(passwordEncoder)) return passwordEncoder;
-        return new BCryptPasswordEncoder();
+    	if(Objects.isNull(passwordEncoder)) {
+    		passwordEncoder = new BCryptPasswordEncoder();
+    	}
+        return passwordEncoder;
     }
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
-			.csrf(csrf -> csrf.disable());
-		
-//		http.authorizeHttpRequests(authorize -> authorize
-//                .requestMatchers("/login").permitAll());
-//                .anyRequest().authenticated());
-//		.logout(logout -> logout.deleteCookies("JSESSIONID")
-//				.logoutRequestMatcher(new AntPathRequestMatcher("/logout")));
-		
+		http.authorizeHttpRequests(authorize -> 
+				authorize.anyRequest().permitAll())		
+			.csrf(csrf -> csrf.disable());		
 		return http.build();		
 	}
 
