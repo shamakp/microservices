@@ -21,8 +21,9 @@ import com.leaseleap.userservice.model.PatchUserRequest;
 import com.leaseleap.userservice.model.Users;
 import com.leaseleap.userservice.service.UserService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 @RestController
 @RequestMapping("leaseleap/v1")
 public class UserController {
@@ -33,31 +34,44 @@ public class UserController {
 	@PostMapping("/login")
 	@ResponseStatus(HttpStatus.OK)
 	public void login(@Valid @RequestBody LoginUserRequest loginUser) {
+		log.debug("Entering login method");
 		if(!userService.login(loginUser)) {
-			throw new WrongPasswordException("The given password is wrong");
+			WrongPasswordException wrongPasswordException = 
+					new WrongPasswordException("The given password is wrong");
+			log.error("WrongPasswordException", wrongPasswordException);
+			throw wrongPasswordException;
 		}
+		log.debug("Exiting login method");
 		return;
 	}
 	
 	@PostMapping("/users")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Users createUser(@Valid @RequestBody Users user) {
-		return userService.createUser(user);
+		log.debug("Entering user creation method");
+		Users createdUser = userService.createUser(user);
+		log.debug("Exiting user creation method");
+		return createdUser;
 	}
 	
 	@GetMapping("/users")
 	@ResponseStatus(HttpStatus.OK)
 	public List<Users> listUsers() {
-		return userService.listUsers();
+		log.debug("Entering listUser method");
+		List<Users> userList = userService.listUsers(); 
+		log.debug("Exiting listUser method");
+		return userList;
 	}
 	
 	@PostMapping("/{user_id}")
 	@ResponseStatus(HttpStatus.OK)
 	public Users validateuser(@PathVariable("user_id") String userId) {
+		log.debug("Entering validate user method");
 		Users user = Optional.ofNullable(userId)
 				.map(Long::valueOf)
 				.map(userService::validateUser)
 				.orElseThrow();
+		log.debug("Exiting validate user method");
 		return user;
 	}
 	
@@ -65,18 +79,22 @@ public class UserController {
 	@ResponseStatus(HttpStatus.OK)
 	public Users updateUser(@PathVariable("user_id") String userId, 
 			@RequestBody PatchUserRequest patchUserReq) {
+		log.debug("Entering update user method");
 		Users user = Optional.ofNullable(userId)
 				.map(Long::valueOf)
 				.map(id -> userService.updateUser(id, patchUserReq))
 				.orElseThrow();
+		log.debug("Exiting update user method");
 		return user;
 	}
 	
 	@DeleteMapping("/{user_id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void deleteUser(@PathVariable("user_id") String userId) {
+		log.debug("Entering delete user method");
 		userService.deleteUser(Optional.ofNullable(userId)
-				.map(Long::valueOf).orElse(0L));				
+				.map(Long::valueOf).orElse(0L));
+		log.debug("Exiting delete user method");
 	}	
 
 }
